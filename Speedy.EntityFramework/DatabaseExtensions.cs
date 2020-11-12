@@ -78,7 +78,7 @@ namespace Speedy.EntityFramework
 
 					foreach (var mutableIndex in indexes.Where(x => x.IsUnique && x.Properties.Any(p => p.Name == property.Name)))
 					{
-						var index = mutableIndex as Index;
+						var index = mutableIndex as Microsoft.EntityFrameworkCore.Metadata.Internal.Index;
 						if (index == null)
 						{
 							continue;

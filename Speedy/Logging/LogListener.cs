@@ -115,7 +115,7 @@ namespace Speedy.Logging
 		/// <summary>
 		/// Occurs when an event is written.
 		/// </summary>
-		public event EventHandler<EventWrittenEventArgs> EventWritten;
+		public new event EventHandler<EventWrittenEventArgs> EventWritten;
 
 		#endregion
 	}

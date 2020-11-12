@@ -41,7 +41,7 @@ namespace Speedy.EntityFramework.Sql
 
 		public IReadOnlyList<IProperty> Properties { get; private set; }
 
-		public IDictionary<string, string> PropertyToColumnName => _propertyToColumnNames ??= Properties.ToDictionary(x => x.Name, x => x.GetColumnName());
+		public IDictionary<string, string> PropertyToColumnName => _propertyToColumnNames ??= Properties.ToDictionary(x => x.Name, GetColumnName);
 
 		public string ProviderPrefix { get; set; }
 
@@ -64,6 +64,11 @@ namespace Speedy.EntityFramework.Sql
 			var tableInfo = new SqlTableInformation();
 			tableInfo.LoadData<T>(database);
 			return tableInfo;
+		}
+
+		public string GetColumnName(IProperty property)
+		{
+			return property.GetColumnName(StoreObjectIdentifier.Table(TableName, SchemaName));
 		}
 
 		public string GetFormattedTableName()

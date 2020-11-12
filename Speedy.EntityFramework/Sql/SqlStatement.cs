@@ -336,11 +336,11 @@ namespace Speedy.EntityFramework.Sql
 			if (onlyIncludePrimaryKeys)
 			{
 				return TableInformation.Properties
-					.Where(x => x.IsPrimaryKey() && !excludedColumns.Contains(x.GetColumnName()))
+					.Where(x => x.IsPrimaryKey() && !excludedColumns.Contains(TableInformation.GetColumnName(x)))
 					.Select(x =>
 					{
 						var dbType = GetSqlType(x.PropertyInfo.PropertyType);
-						var columnName = x.GetColumnName();
+						var columnName = TableInformation.GetColumnName(x);
 						var parameterName = AddOrUpdateParameter(columnName, dbType);
 						return (columnName, parameterName);
 					})
@@ -348,12 +348,12 @@ namespace Speedy.EntityFramework.Sql
 			}
 
 			TableInformation.Properties
-				.Where(x => !excludedColumns.Contains(x.GetColumnName())
+				.Where(x => !excludedColumns.Contains(TableInformation.GetColumnName(x))
 					&& (!x.IsPrimaryKey() || (includePrimaryKeys && x.IsPrimaryKey())))
 				.ForEach(x =>
 				{
 					var dbType = GetSqlType(x.PropertyInfo.PropertyType);
-					AddOrUpdateParameter(x.GetColumnName(), dbType);
+					AddOrUpdateParameter(TableInformation.GetColumnName(x), dbType);
 				});
 
 			return ParameterNameByColumnName;

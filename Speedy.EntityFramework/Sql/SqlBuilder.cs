@@ -7,7 +7,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using Speedy.Extensions;
 
 #endregion
@@ -171,7 +170,8 @@ namespace Speedy.EntityFramework.Sql
 			foreach (var property in statement.TableInformation.Properties)
 			{
 				var entityProperty = statement.TableInformation.EntityProperties[property.Name];
-				var columnName = property.GetColumnName();
+				var columnName = statement.TableInformation.GetColumnName(property);
+				//var columnName = property.GetColumnName(statement.TableInformation.GetStoreObjectIdentifier());
 
 				if (!statement.ParametersByColumnName.TryGetValue(columnName, out var parameter))
 				{
@@ -192,7 +192,7 @@ namespace Speedy.EntityFramework.Sql
 			foreach (var property in statement.TableInformation.Properties)
 			{
 				var entityProperty = statement.TableInformation.EntityProperties[property.Name];
-				var columnName = property.GetColumnName();
+				var columnName = statement.TableInformation.GetColumnName(property);
 
 				if (!statement.ParametersByColumnName.TryGetValue(columnName, out var parameter))
 				{

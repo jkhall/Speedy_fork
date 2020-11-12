@@ -347,12 +347,13 @@ namespace Speedy.EntityFramework
 			var entityType = Database.Model.FindEntityType(type);
 			var entityProperties = entityType.GetProperties().ToDictionary(a => a.Name, a => a);
 			var properties = type.GetCachedProperties().Where(x => entityProperties.ContainsKey(x.Name)).ToList();
+			var tableInformation = SqlTableInformation.CreateInstance<T>(Database);
 
 			foreach (var property in properties)
 			{
 				var entityPropertyType = entityProperties[property.Name];
 				var propertyType = property.PropertyType;
-				var columnName = entityPropertyType.GetColumnName();
+				var columnName = tableInformation.GetColumnName(entityPropertyType);
 				var underlyingType = Nullable.GetUnderlyingType(propertyType);
 				dataTable.Columns.Add(columnName, underlyingType ?? propertyType);
 				columnValues.Add(property.Name, null);
