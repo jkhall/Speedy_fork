@@ -42,7 +42,7 @@ try
 
 	# Prepare the build for versioning!
 	# $newVersion = .\IncrementVersion.ps1 -Build +
-	$newVersion = .\IncrementVersion.ps1 -Major 6 -Minor 5 -Build $BuildNumber
+	$newVersion = .\IncrementVersion.ps1 -Major 7 -Minor 0 -Build $BuildNumber
 	$nugetVersion = ([Version] $newVersion).ToString(3)
 	
 	if ($VersionSuffix.Length -gt 0)
@@ -71,8 +71,8 @@ try
 		exit $LASTEXITCODE
 	}
 
-	Copy-Item "$productName\bin\$Configuration\netstandard2.0\$productName.dll" "$destination\bin\"
-	Copy-Item "$productName\bin\$Configuration\netstandard2.0\$productName.pdb" "$destination\bin\"
+	Copy-Item "$productName\bin\$Configuration\netstandard2.1\$productName.dll" "$destination\bin\"
+	Copy-Item "$productName\bin\$Configuration\netstandard2.1\$productName.pdb" "$destination\bin\"
 
 	Copy-Item "$productName\bin\$Configuration\$productName.$nugetVersion.nupkg" "$destination\"
 	Copy-Item "$productName.EntityFramework\bin\$Configuration\$productName.EntityFramework.$nugetVersion.nupkg" "$destination\"

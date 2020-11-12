@@ -7,10 +7,10 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Speedy.Configuration;
 using Speedy.Exceptions;
 using Speedy.Extensions;
+using Index = Microsoft.EntityFrameworkCore.Metadata.Internal.Index;
 
 #endregion
 
@@ -78,7 +78,7 @@ namespace Speedy.EntityFramework
 
 					foreach (var mutableIndex in indexes.Where(x => x.IsUnique && x.Properties.Any(p => p.Name == property.Name)))
 					{
-						var index = mutableIndex as Microsoft.EntityFrameworkCore.Metadata.Internal.Index;
+						var index = mutableIndex as Index;
 						if (index == null)
 						{
 							continue;
@@ -101,13 +101,13 @@ namespace Speedy.EntityFramework
 					var firstParameter = GetPropertyExpression(foreignKey.DeclaringEntityType.ClrType, foreignKey.DependentToPrincipal.Name);
 					var secondParameter = GetPropertyObjectExpression(foreignKey.DeclaringEntityType.ClrType, foreignKey.Properties[0].Name);
 					var thirdParameter = foreignKey.PrincipalToDependent != null ? GetPropertyExpression(foreignKey.PrincipalEntityType.ClrType, foreignKey.PrincipalToDependent.Name) : null;
-					
+
 					// Get the types for the property configurations
 					var firstType = foreignKey.DeclaringEntityType.ClrType;
 					var secondType = foreignKey.DeclaringEntityType.ClrType.GetPrimaryKeyType();
 					var thirdType = foreignKey.PrincipalEntityType.ClrType;
 					var fourthType = foreignKey.PrincipalEntityType.ClrType.GetPrimaryKeyType();
-					
+
 					// Get the configuration for the property
 					var method = databaseHasRequiredMethod.MakeGenericMethod(firstType, secondType, thirdType, fourthType);
 					var configuration = (IPropertyConfiguration) method.Invoke(database, new object[] { foreignKey.IsRequired, firstParameter, secondParameter, thirdParameter });
@@ -122,7 +122,7 @@ namespace Speedy.EntityFramework
 						case DeleteBehavior.Restrict:
 							configuration.OnDelete(RelationshipDeleteBehavior.Restrict);
 							break;
-						
+
 						case DeleteBehavior.Cascade:
 							configuration.OnDelete(RelationshipDeleteBehavior.Cascade);
 							break;
@@ -142,7 +142,7 @@ namespace Speedy.EntityFramework
 			{
 				return DatabaseProviderType.Sqlite;
 			}
-			
+
 			if (database.Database.ProviderName.EndsWith(nameof(DatabaseProviderType.SqlServer)))
 			{
 				return DatabaseProviderType.SqlServer;
@@ -171,7 +171,7 @@ namespace Speedy.EntityFramework
 				return arg;
 			}
 		}
-		
+
 		private static Expression GetPropertyExpression(this Type type, string name)
 		{
 			var parameter = Expression.Parameter(type, "x");

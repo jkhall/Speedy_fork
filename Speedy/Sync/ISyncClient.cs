@@ -8,24 +8,24 @@
 		#region Properties
 
 		/// <summary>
+		/// An optional converter to process sync objects from Server to Client
+		/// </summary>
+		SyncClientIncomingConverter IncomingConverter { get; set; }
+
+		/// <summary>
 		/// Gets or sets the name of the sync client.
 		/// </summary>
 		string Name { get; }
 
 		/// <summary>
-		/// An optional converter to process sync objects from Server to Client
+		/// The options for the sync client
 		/// </summary>
-		SyncClientIncomingConverter IncomingConverter { get; set; }
-		
+		SyncClientOptions Options { get; }
+
 		/// <summary>
 		/// An optional converter to process sync objects from Client to Server
 		/// </summary>
 		SyncClientOutgoingConverter OutgoingConverter { get; set; }
-
-		/// <summary>
-		/// The options for the sync client
-		/// </summary>
-		SyncClientOptions Options { get; }
 
 		/// <summary>
 		/// The communication statistics for this sync client.
@@ -36,7 +36,7 @@
 		/// The options for the sync
 		/// </summary>
 		SyncOptions SyncOptions { get; }
-		
+
 		/// <summary>
 		/// The active sync session. Will be null when a session is not started.
 		/// </summary>

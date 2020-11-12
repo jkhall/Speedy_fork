@@ -810,13 +810,13 @@ namespace Speedy.Storage
 
 		#region Events
 
+		/// <inheritdoc />
+		public event NotifyCollectionChangedEventHandler CollectionChanged;
+
 		/// <summary>
 		/// Occurs when an entity is being added.
 		/// </summary>
 		internal event Action<T> AddingEntity;
-
-		/// <inheritdoc />
-		public event NotifyCollectionChangedEventHandler CollectionChanged;
 
 		/// <summary>
 		/// Occurs when an entity is being deleted.

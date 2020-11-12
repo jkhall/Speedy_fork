@@ -179,7 +179,7 @@ namespace Speedy.Sync
 		{
 			await Task.Factory.StartNew(Run, CancellationSource.Token);
 		}
-		
+
 		/// <summary>
 		/// Stops the sync process.
 		/// </summary>

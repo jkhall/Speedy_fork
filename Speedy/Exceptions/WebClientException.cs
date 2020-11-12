@@ -1,11 +1,9 @@
 ﻿#region References
 
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
-using Speedy.Sync;
 
 #endregion
 
@@ -27,12 +25,11 @@ namespace Speedy.Exceptions
 			Code = HttpStatusCode.OK;
 		}
 
-		
 		/// <summary>
 		/// Instantiates an instance of the exception.
 		/// </summary>
 		public WebClientException(HttpResponseMessage result)
-			: this (result.StatusCode, result.Content.ReadAsStringAsync().Result)
+			: this(result.StatusCode, result.Content.ReadAsStringAsync().Result)
 		{
 		}
 
@@ -47,7 +44,7 @@ namespace Speedy.Exceptions
 		/// <summary>
 		/// Instantiates an instance of the exception.
 		/// </summary>
-		public WebClientException(HttpStatusCode code,string message, Exception inner) : base(message, inner)
+		public WebClientException(HttpStatusCode code, string message, Exception inner) : base(message, inner)
 		{
 			Code = code;
 		}

@@ -6,9 +6,8 @@
 	public interface ISyncableDatabaseProvider<out T> : ISyncableDatabaseProvider, IDatabaseProvider<T>
 		where T : ISyncableDatabase
 	{
-		
 	}
-	
+
 	/// <summary>
 	/// Represents a database provider for syncable databases.
 	/// </summary>

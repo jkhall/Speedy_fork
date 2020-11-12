@@ -418,7 +418,7 @@ namespace Speedy.EntityFramework
 				var otherEntityProperties = otherEntity.GetRealType().GetCachedProperties();
 				var otherEntityIdProperty = otherEntityProperties.FirstOrDefault(x => x.Name == "Id");
 				var entityRelationshipIdProperty = entityProperties.FirstOrDefault(x => x.Name == entityRelationship.Name + "Id");
-				
+
 				if (otherEntityIdProperty != null && entityRelationshipIdProperty != null)
 				{
 					var entityId = entityRelationshipIdProperty.GetValue(entity, null);
@@ -433,7 +433,7 @@ namespace Speedy.EntityFramework
 
 				var otherEntitySyncIdProperty = otherEntityProperties.FirstOrDefault(x => x.Name == "SyncId");
 				var entityRelationshipSyncIdProperty = entityProperties.FirstOrDefault(x => x.Name == entityRelationship.Name + "SyncId");
-				
+
 				if (otherEntitySyncIdProperty != null && entityRelationshipSyncIdProperty != null)
 				{
 					var entitySyncId = entityRelationshipSyncIdProperty.GetValue(entity, null);

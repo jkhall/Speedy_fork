@@ -331,7 +331,7 @@ namespace Speedy.EntityFramework
 			);
 
 			var nullableDateTimeConverter = new ValueConverter<DateTime?, DateTime?>(
-				x => x.HasValue 
+				x => x.HasValue
 					? x.Value.Ticks == DateTimeExtensions.MinDateTimeTicks || x.Value.Ticks == DateTimeExtensions.MaxDateTimeTicks
 						? DateTime.SpecifyKind(x.Value, DateTimeKind.Utc)
 						: x.Value.ToUniversalTime()
@@ -509,7 +509,7 @@ namespace Speedy.EntityFramework
 						// Update modified to now for new entities.
 						modifiableEntity.ModifiedOn = now;
 					}
-					
+
 					entity.EntityModified();
 					break;
 

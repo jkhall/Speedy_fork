@@ -24,7 +24,7 @@ namespace Speedy.Serialization
 
 		static Serializer()
 		{
-			_settingsForDeserialization = new SerializerSettings(false, false, false, false, false, false);
+			_settingsForDeserialization = new SerializerSettings();
 			_settingsForDeepClone1 = new SerializerSettings(ignoreVirtuals: true);
 			_settingsForDeepClone2 = new SerializerSettings(ignoreVirtuals: false);
 		}

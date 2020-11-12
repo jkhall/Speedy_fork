@@ -75,7 +75,7 @@ namespace Speedy.EntityFramework
 		{
 			return Set.FirstOrDefault(x => x.SyncId == syncId);
 		}
-		
+
 		/// <inheritdoc />
 		public ISyncEntity Read(ISyncEntity syncEntity, SyncRepositoryFilter filter)
 		{
@@ -102,8 +102,8 @@ namespace Speedy.EntityFramework
 		{
 			var query = Set
 				.AsNoTracking()
-				.Where(x => (x.CreatedOn >= since && x.CreatedOn < until)
-				|| (x.ModifiedOn >= since && x.ModifiedOn < until));
+				.Where(x => x.CreatedOn >= since && x.CreatedOn < until
+					|| x.ModifiedOn >= since && x.ModifiedOn < until);
 
 			if (filter is SyncRepositoryFilter<T> srf && srf.OutgoingExpression != null)
 			{

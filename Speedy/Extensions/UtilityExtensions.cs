@@ -29,7 +29,7 @@ namespace Speedy.Extensions
 				action(item);
 			}
 		}
-		
+
 		/// <summary>
 		/// Runs action1 if the test is true or action2 if false.
 		/// </summary>

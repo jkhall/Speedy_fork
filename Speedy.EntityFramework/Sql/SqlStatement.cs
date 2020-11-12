@@ -349,7 +349,7 @@ namespace Speedy.EntityFramework.Sql
 
 			TableInformation.Properties
 				.Where(x => !excludedColumns.Contains(TableInformation.GetColumnName(x))
-					&& (!x.IsPrimaryKey() || (includePrimaryKeys && x.IsPrimaryKey())))
+					&& (!x.IsPrimaryKey() || includePrimaryKeys && x.IsPrimaryKey()))
 				.ForEach(x =>
 				{
 					var dbType = GetSqlType(x.PropertyInfo.PropertyType);
@@ -365,10 +365,7 @@ namespace Speedy.EntityFramework.Sql
 			{
 				return sqliteType;
 			}
-			else
-			{
-				return SqliteType.Integer;
-			}
+			return SqliteType.Integer;
 		}
 
 		internal static SqliteType GetSqliteType(Type type)
@@ -382,10 +379,7 @@ namespace Speedy.EntityFramework.Sql
 			{
 				return _typeToSqlDbTypeDictionary[type];
 			}
-			else
-			{
-				return SqlDbType.BigInt;
-			}
+			return SqlDbType.BigInt;
 		}
 
 		internal string GetWhereColumnList(IDictionary<string, string> columnsAndParameters)

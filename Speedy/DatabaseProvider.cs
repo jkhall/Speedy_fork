@@ -43,30 +43,6 @@ namespace Speedy
 
 		#region Methods
 
-		/// <inheritdoc />
-		public T GetDatabase()
-		{
-			return _provider(Options.DeepClone());
-		}
-
-		/// <inheritdoc />
-		public T GetDatabase(DatabaseOptions options)
-		{
-			return _provider(options);
-		}
-
-		/// <inheritdoc />
-		IDatabase IDatabaseProvider.GetDatabase()
-		{
-			return GetDatabase();
-		}
-
-		/// <inheritdoc />
-		IDatabase IDatabaseProvider.GetDatabase(DatabaseOptions options)
-		{
-			return GetDatabase(options);
-		}
-
 		/// <summary>
 		/// Runs a bulk process where the database lifetime is based on the iteration size.
 		/// A database will be instantiated and used for the iteration count. When the iteration
@@ -74,9 +50,9 @@ namespace Speedy
 		/// and processing will continue until the total count is reached. Finally the database
 		/// will be saved and disposed.
 		/// </summary>
-		/// <param name="total"></param>
-		/// <param name="iterationSize"></param>
-		/// <param name="process"></param>
+		/// <param name="total"> </param>
+		/// <param name="iterationSize"> </param>
+		/// <param name="process"> </param>
 		public void BulkProcess(int total, int iterationSize, Action<int, T> process)
 		{
 			var database = GetDatabase();
@@ -103,6 +79,30 @@ namespace Speedy
 				database.SaveChanges();
 				database.Dispose();
 			}
+		}
+
+		/// <inheritdoc />
+		public T GetDatabase()
+		{
+			return _provider(Options.DeepClone());
+		}
+
+		/// <inheritdoc />
+		public T GetDatabase(DatabaseOptions options)
+		{
+			return _provider(options);
+		}
+
+		/// <inheritdoc />
+		IDatabase IDatabaseProvider.GetDatabase()
+		{
+			return GetDatabase();
+		}
+
+		/// <inheritdoc />
+		IDatabase IDatabaseProvider.GetDatabase(DatabaseOptions options)
+		{
+			return GetDatabase(options);
 		}
 
 		#endregion

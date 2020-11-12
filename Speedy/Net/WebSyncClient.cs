@@ -49,21 +49,16 @@ namespace Speedy.Net
 		#region Properties
 
 		/// <inheritdoc />
-		public string Name { get; }
-
-		/// <inheritdoc />
 		public SyncClientIncomingConverter IncomingConverter { get; set; }
 
 		/// <inheritdoc />
-		public SyncClientOutgoingConverter OutgoingConverter { get; set; }
-
-		/// <summary>
-		/// The web client to use to connect to the server.
-		/// </summary>
-		public WebClient WebClient { get; }
+		public string Name { get; }
 
 		/// <inheritdoc />
 		public SyncClientOptions Options { get; set; }
+
+		/// <inheritdoc />
+		public SyncClientOutgoingConverter OutgoingConverter { get; set; }
 
 		/// <inheritdoc />
 		public SyncStatistics Statistics { get; }
@@ -72,7 +67,12 @@ namespace Speedy.Net
 		public SyncOptions SyncOptions { get; private set; }
 
 		/// <inheritdoc />
-		public SyncSession SyncSession { get;}
+		public SyncSession SyncSession { get; }
+
+		/// <summary>
+		/// The web client to use to connect to the server.
+		/// </summary>
+		public WebClient WebClient { get; }
 
 		#endregion
 

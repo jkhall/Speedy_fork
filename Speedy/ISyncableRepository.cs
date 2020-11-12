@@ -65,7 +65,7 @@ namespace Speedy
 		/// <param name="syncId"> The ID of the sync entity. </param>
 		/// <returns> The sync entity or null. </returns>
 		ISyncEntity Read(Guid syncId);
-		
+
 		/// <summary>
 		/// Gets the sync entity by the ID.
 		/// </summary>

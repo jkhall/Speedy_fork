@@ -33,6 +33,14 @@ namespace Speedy.Sync
 		public long Count { get; set; }
 
 		/// <summary>
+		/// Indicates if the sync engine is running.
+		/// </summary>
+		public bool IsRunning =>
+			Status != SyncEngineStatus.Cancelled
+			&& Status != SyncEngineStatus.Completed
+			&& Status != SyncEngineStatus.Stopped;
+
+		/// <summary>
 		/// Gets or set the message for the state.
 		/// </summary>
 		public string Message { get; set; }
@@ -48,14 +56,6 @@ namespace Speedy.Sync
 				return double.IsNaN(result) || double.IsInfinity(result) ? 0 : result;
 			}
 		}
-
-		/// <summary>
-		/// Indicates if the sync engine is running.
-		/// </summary>
-		public bool IsRunning =>
-			Status != SyncEngineStatus.Cancelled
-			&& Status != SyncEngineStatus.Completed
-			&& Status != SyncEngineStatus.Stopped;
 
 		/// <summary>
 		/// Gets or sets the current status of the sync.

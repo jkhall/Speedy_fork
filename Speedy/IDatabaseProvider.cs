@@ -22,7 +22,7 @@
 
 		#endregion
 	}
-	
+
 	/// <summary>
 	/// Represents a database provider for syncable databases.
 	/// </summary>
