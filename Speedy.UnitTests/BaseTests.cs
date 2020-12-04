@@ -1,4 +1,4 @@
-#region References
+﻿#region References
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -6,14 +6,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Speedy.UnitTests
 {
-	[TestClass]
-	public class UnitTest1
+	public class BaseTests
 	{
 		#region Methods
 
-		[TestMethod]
-		public void TestMethod1()
+		[TestInitialize]
+		public virtual void TestInitialize()
 		{
+			TestHelper.Initialize();
 		}
 
 		#endregion

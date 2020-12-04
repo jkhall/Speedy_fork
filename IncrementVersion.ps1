@@ -69,22 +69,27 @@ function Set-BuildNumbers
 	{
 		$fileXml = [xml](Get-Content $file.FullName -Raw)
 
-		if ($fileXml.Project.PropertyGroup[ 0].AssemblyVersion -ne $null)
+		Write-Verbose $file.FullName
+		
+		foreach ($group in $fileXml.Project.PropertyGroup)
 		{
-			Write-Verbose $file.FullName
-			$fileXml.Project.PropertyGroup[ 0].AssemblyVersion = $versionNumber
-			$fileXml.Project.PropertyGroup[ 0].FileVersion = $versionNumber
-
-			foreach ($group in $fileXml.Project.PropertyGroup)
+			if ($group.AssemblyVersion -ne $null)
 			{
-				if ($group.Version)
-				{
-					$group.Version = $versionNumber
-				}
+				$group.AssemblyVersion = $versionNumber
 			}
 
-			Set-Content -Path $file.FullName -Value (Format-Xml -Data $fileXml.OuterXml) -Encoding UTF8
+			if ($group.FileVersion -ne $null)
+			{
+				$group.FileVersion = $versionNumber
+			}
+
+			if ($group.Version)
+			{
+				$group.Version = $versionNumber
+			}
 		}
+
+		Set-Content -Path $file.FullName -Value (Format-Xml -Data $fileXml.OuterXml) -Encoding UTF8
 	}
 }
 
