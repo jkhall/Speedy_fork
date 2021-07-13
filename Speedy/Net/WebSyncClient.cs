@@ -52,6 +52,9 @@ namespace Speedy.Net
 		public ISyncableDatabaseProvider DatabaseProvider { get; }
 
 		/// <inheritdoc />
+		public SyncEngine Engine { get; set; }
+
+		/// <inheritdoc />
 		public SyncClientIncomingConverter IncomingConverter { get; set; }
 
 		/// <inheritdoc />
@@ -64,6 +67,9 @@ namespace Speedy.Net
 		public SyncClientOutgoingConverter OutgoingConverter { get; set; }
 
 		/// <inheritdoc />
+		public SyncClientProfiler Profiler { get; }
+
+		/// <inheritdoc />
 		public SyncStatistics Statistics { get; }
 
 		/// <inheritdoc />
@@ -71,9 +77,6 @@ namespace Speedy.Net
 
 		/// <inheritdoc />
 		public SyncSession SyncSession { get; }
-
-		/// <inheritdoc />
-		public SyncClientProfiler Profiler { get; }
 
 		/// <summary>
 		/// The web client to use to connect to the server.
@@ -132,7 +135,7 @@ namespace Speedy.Net
 		/// <inheritdoc />
 		public T GetDatabase<T>() where T : class, ISyncableDatabase
 		{
-			return (T) DatabaseProvider.GetSyncableDatabase();
+			return (T)DatabaseProvider.GetSyncableDatabase();
 		}
 
 		#endregion

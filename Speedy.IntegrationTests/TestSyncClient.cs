@@ -48,6 +48,8 @@ namespace Speedy.IntegrationTests
 
 		public ISyncableDatabaseProvider DatabaseProvider { get; }
 
+		public SyncEngine Engine { get; set; }
+
 		public SyncClientIncomingConverter IncomingConverter { get; set; }
 
 		public string Name { get; }

@@ -13,6 +13,11 @@
 		ISyncableDatabaseProvider DatabaseProvider { get; }
 
 		/// <summary>
+		/// The hosting engine will be set by the SyncEngine.
+		/// </summary>
+		SyncEngine Engine { get; set; }
+
+		/// <summary>
 		/// An optional converter to process sync objects from Server to Client
 		/// </summary>
 		SyncClientIncomingConverter IncomingConverter { get; set; }

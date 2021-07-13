@@ -24,6 +24,7 @@ namespace Speedy.Sync
 		#region Fields
 
 		private int _changeCount;
+		private SyncEngine _engine;
 
 		#endregion
 
@@ -53,6 +54,9 @@ namespace Speedy.Sync
 
 		/// <inheritdoc />
 		public ISyncableDatabaseProvider DatabaseProvider { get; }
+
+		/// <inheritdoc />
+		public SyncEngine Engine { get; set; }
 
 		/// <inheritdoc />
 		public SyncClientIncomingConverter IncomingConverter { get; set; }
@@ -142,7 +146,7 @@ namespace Speedy.Sync
 					request.Until = TimeService.UtcNow;
 				}
 
-				var take = request.Take <= 0 || request.Take > SyncOptions.ItemsPerSyncRequest ? SyncOptions.ItemsPerSyncRequest : request.Take;
+				var take = (request.Take <= 0) || (request.Take > SyncOptions.ItemsPerSyncRequest) ? SyncOptions.ItemsPerSyncRequest : request.Take;
 				var remainingSkip = request.Skip;
 				using var database = DatabaseProvider.GetSyncableDatabase();
 
@@ -150,7 +154,7 @@ namespace Speedy.Sync
 				{
 					// Skip this type if it's being filters or if the outgoing converter cannot convert
 					if (SyncOptions.ShouldExcludeRepository(repository.TypeName)
-						|| OutgoingConverter != null && !OutgoingConverter.CanConvert(repository.TypeName))
+						|| ((OutgoingConverter != null) && !OutgoingConverter.CanConvert(repository.TypeName)))
 					{
 						// Do not process this repository because we have filters and the repository is not in the filters.
 						continue;
@@ -268,7 +272,7 @@ namespace Speedy.Sync
 		/// <inheritdoc />
 		public T GetDatabase<T>() where T : class, ISyncableDatabase
 		{
-			return (T) DatabaseProvider.GetSyncableDatabase();
+			return (T)DatabaseProvider.GetSyncableDatabase();
 		}
 
 		/// <summary>
@@ -330,7 +334,7 @@ namespace Speedy.Sync
 			{
 				// Skip this type if it's being filters or if the outgoing converter cannot convert
 				if (SyncOptions.ShouldExcludeRepository(repository.TypeName)
-					|| OutgoingConverter != null && !OutgoingConverter.CanConvert(repository.TypeName))
+					|| ((OutgoingConverter != null) && !OutgoingConverter.CanConvert(repository.TypeName)))
 				{
 					// Do not count this repository because we have filters and the repository is not in the filters.
 					return 0;
@@ -352,8 +356,8 @@ namespace Speedy.Sync
 				.Select(x => new
 				{
 					EntityPropertyInfo = x,
-					EntityIdPropertyInfo = properties.FirstOrDefault(y => y.Name == x.Name + "Id"),
-					EntitySyncIdPropertyInfo = properties.FirstOrDefault(y => y.Name == x.Name + "SyncId"),
+					EntityIdPropertyInfo = properties.FirstOrDefault(y => y.Name == (x.Name + "Id")),
+					EntitySyncIdPropertyInfo = properties.FirstOrDefault(y => y.Name == (x.Name + "SyncId")),
 					Type = x.PropertyType,
 					TypeIdPropertyInfo = x.PropertyType.GetProperties().First(p => p.Name == "Id")
 				})
@@ -366,7 +370,7 @@ namespace Speedy.Sync
 				{
 					EntityPropertyInfo = x.EntityPropertyInfo,
 					EntityIdPropertyInfo = x.EntityIdPropertyInfo,
-					EntitySyncId = (Guid?) x.EntitySyncIdPropertyInfo.GetValue(entity),
+					EntitySyncId = (Guid?)x.EntitySyncIdPropertyInfo.GetValue(entity),
 					Type = x.Type,
 					TypeIdPropertyInfo = x.TypeIdPropertyInfo
 				})
@@ -441,7 +445,7 @@ namespace Speedy.Sync
 					// Disable caching when running "individual" processing just in case there is caching issues.
 					// Disable caching if the repository is using a different lookup filter because matching could be using a different "sync lookup key"
 					// - todo: change key cache to add a "GetEntitySyncId" (see GetEntityId) method, this way we could cache on any lookup key
-					if (lookupFilter == null && !isIndividualProcess && database.KeyCache != null && Options.EnablePrimaryKeyCache && !Options.IsServerClient)
+					if ((lookupFilter == null) && !isIndividualProcess && (database.KeyCache != null) && Options.EnablePrimaryKeyCache && !Options.IsServerClient)
 					{
 						var id = database.KeyCache.GetEntityId(syncEntity);
 						if (id == null)
@@ -456,16 +460,16 @@ namespace Speedy.Sync
 
 				var syncStatus = syncObject.Status;
 
-				if (foundEntity != null && syncObject.Status == SyncObjectStatus.Added)
+				if ((foundEntity != null) && (syncObject.Status == SyncObjectStatus.Added))
 				{
 					syncStatus = SyncObjectStatus.Modified;
 				}
-				else if (foundEntity == null && syncObject.Status == SyncObjectStatus.Modified)
+				else if ((foundEntity == null) && (syncObject.Status == SyncObjectStatus.Modified))
 				{
 					syncStatus = SyncObjectStatus.Added;
 				}
 
-				if (syncEntity.IsDeleted && syncStatus != SyncObjectStatus.Deleted)
+				if (syncEntity.IsDeleted && (syncStatus != SyncObjectStatus.Deleted))
 				{
 					syncStatus = SyncObjectStatus.Deleted;
 				}
@@ -478,9 +482,9 @@ namespace Speedy.Sync
 							// Instantiate a new instance of the sync entity to update, also use the provided sync ID
 							// this is because it's possibly the sync entity is blocking updating of the sync ID so it 
 							// will need to be set manually being that it will be filtered on update.
-							foundEntity = (ISyncEntity) Activator.CreateInstance(syncEntity.GetType());
+							foundEntity = (ISyncEntity)Activator.CreateInstance(syncEntity.GetType());
 							foundEntity.SyncId = syncObject.SyncId;
-							
+
 							if (UpdateEntity(database, syncObject, syncEntity, foundEntity, syncStatus, issues))
 							{
 								repository.Add(foundEntity);
@@ -491,7 +495,7 @@ namespace Speedy.Sync
 					case SyncObjectStatus.Modified:
 						Profiler.ProcessSyncObjectModified.Time(() =>
 						{
-							if (foundEntity == null || (foundEntity.ModifiedOn >= syncEntity.ModifiedOn && !correction))
+							if ((foundEntity == null) || ((foundEntity.ModifiedOn >= syncEntity.ModifiedOn) && !correction))
 							{
 								// Did not find the entity or it has not changed.
 								return;
@@ -520,7 +524,7 @@ namespace Speedy.Sync
 								// this means we must "add" the entity so we can delete it
 
 								// Insert the "soft deleted" item into the database "IsDeleted" will be handled below.
-								foundEntity = (ISyncEntity) Activator.CreateInstance(syncEntity.GetType());
+								foundEntity = (ISyncEntity)Activator.CreateInstance(syncEntity.GetType());
 								foundEntity.SyncId = syncObject.SyncId;
 								repository.Add(foundEntity);
 							}
@@ -548,34 +552,6 @@ namespace Speedy.Sync
 			});
 		}
 
-		private bool UpdateEntity(ISyncableDatabase database, SyncObject syncObject, ISyncEntity syncEntity, ISyncEntity foundEntity, SyncObjectStatus syncStatus, ICollection<SyncIssue> issues)
-		{
-			try
-			{
-				if (!UpdateEntity(syncEntity, foundEntity, syncStatus))
-				{
-					// returning false just means do not process and do not return a sync issue
-					return false;
-				}
-
-				UpdateLocalRelationships(foundEntity, database);
-				return true;
-			}
-			catch (UpdateException ex)
-			{
-				// throwing an update exception just means return a sync issue
-				var issue = new SyncIssue
-				{
-					Id = syncObject.SyncId,
-					IssueType = SyncIssueType.UpdateException,
-					Message = ex.Message,
-					TypeName = syncObject.TypeName
-				};
-				issues.Add(issue);
-				return false;
-			}
-		}
-
 		private void ProcessSyncObjects(ISyncableDatabaseProvider provider, IEnumerable<SyncObject> syncObjects, ICollection<SyncIssue> issues, bool corrections)
 		{
 			var objects = Profiler.ProcessSyncObjectsSyncObjectsToList.Time(syncObjects.ToList);
@@ -600,9 +576,19 @@ namespace Speedy.Sync
 					{
 						for (var i = 0; i < objects.Count; i++)
 						{
+							if (Engine?.CancellationSource?.IsCancellationRequested == true)
+							{
+								return;
+							}
+
 							ProcessSyncObject(objects[i], database, issues, corrections, false);
 						}
 					});
+
+					if (Engine?.CancellationSource?.IsCancellationRequested == true)
+					{
+						return;
+					}
 
 					Profiler.ProcessSyncObjectsSaveDatabase.Time(() => database.SaveChanges());
 				}
@@ -625,6 +611,11 @@ namespace Speedy.Sync
 
 			foreach (var syncObject in objects)
 			{
+				if (Engine?.CancellationSource?.IsCancellationRequested == true)
+				{
+					return;
+				}
+
 				try
 				{
 					using var database = provider.GetSyncableDatabase();
@@ -718,6 +709,34 @@ namespace Speedy.Sync
 			}
 		}
 
+		private bool UpdateEntity(ISyncableDatabase database, SyncObject syncObject, ISyncEntity syncEntity, ISyncEntity foundEntity, SyncObjectStatus syncStatus, ICollection<SyncIssue> issues)
+		{
+			try
+			{
+				if (!UpdateEntity(syncEntity, foundEntity, syncStatus))
+				{
+					// returning false just means do not process and do not return a sync issue
+					return false;
+				}
+
+				UpdateLocalRelationships(foundEntity, database);
+				return true;
+			}
+			catch (UpdateException ex)
+			{
+				// throwing an update exception just means return a sync issue
+				var issue = new SyncIssue
+				{
+					Id = syncObject.SyncId,
+					IssueType = SyncIssueType.UpdateException,
+					Message = ex.Message,
+					TypeName = syncObject.TypeName
+				};
+				issues.Add(issue);
+				return false;
+			}
+		}
+
 		private bool UpdateEntity(ISyncEntity source, ISyncEntity destination, SyncObjectStatus status)
 		{
 			if (IncomingConverter != null)
@@ -725,7 +744,7 @@ namespace Speedy.Sync
 				return IncomingConverter.Update(source, destination, status);
 			}
 
-			if (destination != null && source != null && destination != source)
+			if ((destination != null) && (source != null) && (destination != source))
 			{
 				destination.UpdateWith(source, false, false, true);
 			}
@@ -746,7 +765,7 @@ namespace Speedy.Sync
 
 			foreach (var relationship in GetRelationshipConfigurations(entity))
 			{
-				if (!relationship.EntitySyncId.HasValue || relationship.EntitySyncId == Guid.Empty)
+				if (!relationship.EntitySyncId.HasValue || (relationship.EntitySyncId == Guid.Empty))
 				{
 					continue;
 				}

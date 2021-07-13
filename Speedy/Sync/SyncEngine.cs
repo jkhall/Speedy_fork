@@ -58,6 +58,9 @@ namespace Speedy.Sync
 			State = new SyncEngineState();
 			Options = options;
 			CancellationSource = source ?? new CancellationTokenSource();
+
+			client.Engine = this;
+			server.Engine = this;
 		}
 
 		#endregion

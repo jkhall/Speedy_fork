@@ -127,8 +127,17 @@ public void AddAddressTest()
 }
 ```
 
+## todo
+
+- Add ability to mark properties as readonly, to now allow edits like Entity.CreatedOn
+- Partial entity updates, how could we allow only some columns to update? How would we track the changes?
+- WebApi incoming data, how can we support partial post in an efficient way but still have maintainable readable code.
+- Speedy.Extensions.EnumExtensions::SetFlag is throwing a cast exception with a ulong enum
+- SyncManager: need to allow some members to be more public
+
 ## Versions
 
-- v7 is the latest supported version
-- v5+ supports Entity Framework Core
+- v9 supports Entity Framework Core 5
+- v7,8 support Entity Framework Core 3
+- v5+ supports Entity Framework Core 2
 - v4 supports Entity Framework 6
